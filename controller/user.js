@@ -23,9 +23,11 @@ export async function getOne(req, res) {
 
 export async function create(req, res) {
     const user = {
-        pseudo: req.body.pseudo,
-        password: await bcrypt.hash(req.body.password, 12),
-        mail: req.body.mail
+        nom: req.body.pseudo,
+        prenom: req.body.prenom,
+        age: req.body.age,
+        mail: req.body.mail,
+        password: await bcrypt.hash(req.body.password, 12)  
 
     }
     const users = await model.create(user);

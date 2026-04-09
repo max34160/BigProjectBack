@@ -1,5 +1,5 @@
 import { Router } from "express";
-import * as sessionCtrl from '../controllers/session.js';
+import * as sessionCtrl from '../controller/session.js';
 import { authByToken } from '../midelware/auth.js';
 
 const router = Router();
