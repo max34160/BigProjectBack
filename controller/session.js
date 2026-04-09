@@ -1,8 +1,8 @@
-import { Player } from "../models/player.js";
+import { User } from "../model/user.js";
 import bcrypt from "bcrypt";
 import jwt from 'jsonwebtoken';
 
-const model = new Player();
+const model = new User();
 
 export async function login(req, res) {
     const user = await model.getByMail(req.body.mail);
