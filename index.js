@@ -1,7 +1,7 @@
 // Import de la bibliothèque
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import apiRouter from './routers/api.js';
+import apiRouter from './router/api.js';
 
 // Création de l'API
 const app = express();
