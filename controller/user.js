@@ -1,4 +1,4 @@
-import { User } from "../model/user.js";
+import { User } from "../model/User.js";
 import bcrypt from "bcrypt";
 
 const model = new User();
@@ -23,11 +23,11 @@ export async function getOne(req, res) {
 
 export async function create(req, res) {
     const user = {
-        nom: req.body.pseudo,
+        nom: req.body.nom,
         prenom: req.body.prenom,
         age: req.body.age,
-        mail: req.body.mail,
-        password: await bcrypt.hash(req.body.password, 12)  
+        email: req.body.email,
+        mdp: await bcrypt.hash(req.body.password, 12)  
 
     }
     const users = await model.create(user);

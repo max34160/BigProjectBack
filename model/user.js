@@ -1,14 +1,10 @@
-import { AbstractModel } from "./abstractModel.js";
+import { AbstractModel } from "./AbstractModel.js";
 import db from "../database.js";
 
 export class User extends AbstractModel {
 
-    constructor() {
-        super("user", ["nom","prenom","age", "password", "mail"]);
-    }
+    table = "user";
+    colones =  ["nom","prenom","age", "email" , "mdp"];
 
-    async getByMail(mail) {
-        const row = await db.getrow('SELECT * FROM User WHERE mail=?', [mail]);
-        return row;
-    }
+    
 }
