@@ -6,7 +6,7 @@ export class AbstractModel {
     colones; // required in children
 
     async get(id) {
-        const idCol = 'id_' + this.table
+        const idCol = 'id_' + this.table;
         const row = await db.getrow('SELECT * FROM ' + this.table + ' WHERE ' + idCol + '=?', [id]);
         return row;
     }

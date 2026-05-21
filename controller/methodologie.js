@@ -12,13 +12,18 @@ export async function getOne(req, res) {
     }
 }
 
+export async function getAll(req, res) {
+    const methodologies = await model.getAll();
+    res.json(methodologies);
+}
+
 
 export async function create(req, res) {
     const methodologie = {
         titre: req.body.titre,
         descriptif: req.body.descriptif,
         img_presentation: req.body.img_presentation
-    }
+    };
     const methodologies = await model.create(methodologie);
     res.json(methodologies);
 }
