@@ -1,4 +1,5 @@
 import { Pro } from "../model/Pro.js";
+import { findMedecinByIdentification } from "./apiController.js";
 
 
 const model = new Pro();
@@ -41,4 +42,40 @@ export async function getAllProByMethodologie(req, res) {
     } else {
         res.status(404).json({ error: "Pro not founnd"});
     }
+}
+
+export async function verify(req, res) {
+    const { identificationNationale } = req.body;
+    if (!identificationNationale)
+        return res.status(400).json({ error: "identificationNationale requis" });
+
+    const medecinData = await findMedecinByIdentification(identificationNationale);
+    if (!medecinData)
+        return res.status(404).json({ error: "Numéro d'identification non reconnu" });
+
+    res.json({
+        identificationNationale: medecinData["Identification nationale PP"],
+        nom: medecinData["Nom d'exercice"],
+        prenom: medecinData["Prénom d'exercice"],
+        profession: medecinData["Libellé profession"],
+        specialite: medecinData["Libellé spécialité"],
+    });
+}
+
+export async function register(req, res) {
+    const { identificationNationale, id_user, nom_cabinet, description, horaire_cabinet, pdp } = req.body;
+    if (!identificationNationale || !id_user)
+        return res.status(400).json({ error: "identificationNationale et id_user requis" });
+
+    const medecinData = await findMedecinByIdentification(identificationNationale);
+    if (!medecinData)
+        return res.status(403).json({ error: "Numéro d'identification non reconnu" });
+
+    const existing = await model.get(id_user);
+    if (existing)
+        return res.status(409).json({ error: "Ce professionnel a déjà un profil" });
+
+    const profil = { id_user, nom_cabinet, description, horaire_cabinet, pdp };
+    const created = await model.create(profil);
+    res.status(201).json(created);
 }

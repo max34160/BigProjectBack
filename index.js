@@ -20,6 +20,3 @@ app.use(cookieParser());
 app.use('/api', apiRouter);
 app.use('/', express.static('public'));
 
-app.listen(process.env.PORT, () => {
-    console.log(`Serveur démarré sur le port ${process.env.PORT}`);
-});
