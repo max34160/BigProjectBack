@@ -33,23 +33,6 @@ CREATE TABLE Methodologie (
 );
 
 
--- Table OpenData
-CREATE TABLE OpenData (
-    id INT PRIMARY KEY,
-    siret VARCHAR(20),
-    nom VARCHAR(100),
-    prenom VARCHAR(100)
-);
-
-
--- Relation Verification (1-1 Pro - OpenData)
-CREATE TABLE Verification (
-    id_pro INT PRIMARY KEY,
-    id_opendata INT UNIQUE,
-    FOREIGN KEY (id_pro) REFERENCES Pro(id_user),
-    FOREIGN KEY (id_opendata) REFERENCES OpenData(id)
-);
-
 -- Relation Exercer (Pro - Methodologie)
 CREATE TABLE Exercer (
     id_pro INT,
