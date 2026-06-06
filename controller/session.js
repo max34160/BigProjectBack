@@ -9,7 +9,6 @@ export async function login(req, res) {
     if (user && bcrypt.compare(req.body.password, user.password)) {
         const token = jwt.sign({ id: user.id_user }, process.env.JWT_SECRET, { expiresIn: 365 * 24 * 60 * 60 * 1000 });
         res.cookie('token', token, { maxAge: 365 * 24 * 60 * 60 * 1000 });
-        console.log(user);
         res.json({ token: token ,user: user});
     } else {
         res.status(404).json({ error: "Wrong credentials"});

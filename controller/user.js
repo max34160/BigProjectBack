@@ -31,8 +31,12 @@ export async function create(req, res) {
 
     }
     const users = await model.create(user);
-    delete users.password;
-    res.json(users);
+    if(users){
+        const token = jwt.sign({ id: users.id_user }, process.env.JWT_SECRET, { expiresIn: 365 * 24 * 60 * 60 * 1000 });            res.cookie('token', token, { maxAge: 365 * 24 * 60 * 60 * 1000 });
+        res.json({ token: token ,user: users}); 
+    }else {
+        res.status(404).json({ error: "User not founnd"});
+    }
 }
 
 export async function update(req, res) {
