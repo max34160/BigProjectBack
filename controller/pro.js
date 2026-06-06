@@ -6,7 +6,7 @@ const model = new Pro();
 export async function getOne(req, res) {
     const pros = await model.get(req.params.id);
     if (pros) {
-        res.json(pros);
+        res.json({pro : pros});
     } else {
         res.status(404).json({ error: "Pro not founnd"});
     }

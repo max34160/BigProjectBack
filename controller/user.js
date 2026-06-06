@@ -27,7 +27,7 @@ export async function create(req, res) {
         prenom: req.body.prenom,
         age: req.body.age,
         email: req.body.email,
-        mdp: await bcrypt.hash(req.body.password, 12)  
+        password: await bcrypt.hash(req.body.password, 12)  
 
     }
     const users = await model.create(user);
@@ -37,7 +37,7 @@ export async function create(req, res) {
 
 export async function update(req, res) {
     req.body.id = req.params.id;
-    const users = await model.update(req.body);
+    const users = await model.update(req.body,req.params.id);
     delete users.password;
     res.json(users);
 }

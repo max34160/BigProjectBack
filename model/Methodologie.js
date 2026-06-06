@@ -3,7 +3,7 @@ import { AbstractModel } from "./AbstractModel.js";
 
 export class Methodologie extends AbstractModel {
 
-    table = "methodologie";
+    table = "Methodologie";
     colones =  ["titre","descriptif","img_presentation"];
 
     async getAllMethodoByPro(id_user) {

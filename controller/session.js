@@ -6,13 +6,14 @@ const model = new User();
 
 export async function login(req, res) {
     const user = await model.getBy({email : req.body.email});
-   
     if (user && bcrypt.compare(req.body.password, user.password)) {
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: 365 * 24 * 60 * 60 * 1000 });
+        const token = jwt.sign({ id: user.id_user }, process.env.JWT_SECRET, { expiresIn: 365 * 24 * 60 * 60 * 1000 });
         res.cookie('token', token, { maxAge: 365 * 24 * 60 * 60 * 1000 });
-        res.json({ token: token });
+        console.log(user);
+        res.json({ token: token ,user: user});
+    } else {
+        res.status(404).json({ error: "Wrong credentials"});
     }
-    res.status(404).json({ error: "Wrong credentials"});
 }
 
 export async function get (req, res) {

@@ -47,16 +47,14 @@ export class AbstractModel {
         return newdata;
     }
 
-    async update(data) {
+    async update(data,id) {
         let colone = [];
-
+        const idCol = 'id_' + this.table;
         for (const key in data) {
             if (this.colones.includes(key))
                 colone.push(key + ' = :' + key);
         }
-
-        const sql = `UPDATE ${this.table} SET ${colone.join(',')} WHERE id=:id`;
-        await db.update(sql, data);
+        await db.update('UPDATE '+this.table+' SET '+colone.join(',')+' WHERE '+idCol+'='+String(id), data);
         const newdata = this.get(data.id);
         return newdata;
     }
