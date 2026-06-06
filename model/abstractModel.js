@@ -31,7 +31,7 @@ export class AbstractModel {
         
         const sql = `INSERT INTO ${this.table}(${colone.join(',')}) VALUES (${value.join(',')})`;
         const insertId = await db.insert(sql, data);
-        const newdata = this.get(insertId);
+        const newdata = await this.get(insertId);
         
         return newdata;
     }
