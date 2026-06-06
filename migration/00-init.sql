@@ -1,7 +1,7 @@
-CREATE DATABASE BigProject2
+CREATE DATABASE BigProject
     DEFAULT CHARACTER SET = 'utf8mb4';
 -- Table User
-use BigProject2;
+use BigProject;
 CREATE TABLE User (
     id_user INT PRIMARY KEY,
     nom VARCHAR(100),
@@ -16,9 +16,9 @@ CREATE TABLE Pro (
     id_pro INT PRIMARY KEY,
     id_user INT ,
     nom_cabinet VARCHAR(150),
+    adresse VARCHAR(150),
     description TEXT,
     horaire_cabinet VARCHAR(100),
-    pdp VARCHAR(255),
     FOREIGN KEY (id_user) REFERENCES User(id_user)
 );
 
