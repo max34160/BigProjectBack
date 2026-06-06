@@ -3,7 +3,7 @@ CREATE DATABASE BigProject
 -- Table User
 use BigProject;
 CREATE TABLE User (
-    id_user INT PRIMARY KEY,
+    id_user INT PRIMARY KEY AUTO_INCREMENT,
     nom VARCHAR(100),
     prenom VARCHAR(100),
     age INT,
@@ -13,7 +13,7 @@ CREATE TABLE User (
 
 -- Table Pro (spécialisation de User)
 CREATE TABLE Pro (
-    id_pro INT PRIMARY KEY,
+    id_pro INT PRIMARY KEY AUTO_INCREMENT,
     id_user INT ,
     nom_cabinet VARCHAR(150),
     adresse VARCHAR(150),
@@ -26,7 +26,7 @@ CREATE TABLE Pro (
 
 -- Table Methodologie
 CREATE TABLE Methodologie (
-    id_methodo INT PRIMARY KEY,
+    id_methodo INT PRIMARY KEY AUTO_INCREMENT,
     titre VARCHAR(150),
     descriptif TEXT,
     img_presentation VARCHAR(255)
