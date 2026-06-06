@@ -8,7 +8,7 @@ CREATE TABLE User (
     prenom VARCHAR(100),
     age INT,
     email VARCHAR(150),
-    mdp VARCHAR(255)
+    password VARCHAR(255)
 );
 
 -- Table Pro (spécialisation de User)
