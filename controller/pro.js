@@ -52,7 +52,7 @@ export async function verify(req, res) {
     const medecinData = await findMedecinByIdentification(identificationNationale);
     if (!medecinData)
         return res.status(404).json({ error: "Numéro d'identification non reconnu" });
-
+    
     res.json({
         identificationNationale: medecinData["Identification nationale PP"],
         nom: medecinData["Nom d'exercice"],
