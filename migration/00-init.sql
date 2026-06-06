@@ -1,7 +1,7 @@
-CREATE DATABASE BigProject2
+CREATE DATABASE BigProject
     DEFAULT CHARACTER SET = 'utf8mb4';
 -- Table User
-use BigProject2;
+use BigProject;
 CREATE TABLE User (
     id_user INT PRIMARY KEY,
     nom VARCHAR(100),
