@@ -17,6 +17,7 @@ CREATE TABLE Pro (
     id_user INT ,
     nom_cabinet VARCHAR(150),
     adresse VARCHAR(150),
+    ville VARCHAR(150),
     description TEXT,
     horaire_cabinet VARCHAR(100),
     FOREIGN KEY (id_user) REFERENCES User(id_user)

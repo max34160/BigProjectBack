@@ -42,7 +42,15 @@ export async function create(req, res) {
 
 export async function update(req, res) {
     req.body.id = req.params.id;
-    const users = await model.update(req.body,req.params.id);
+    if(req.body.password){
+        const update = {
+            password : await bcrypt.hash(req.body.password, 12)  
+        }
+        const users = await model.update(update,req.params.id);
+    }else{
+        const users = await model.update(req.body,req.params.id);
+    }
+    
     delete users.password;
     res.json(users);
 }
