@@ -18,7 +18,7 @@ export async function create(req, res) {
         id_user: req.body.id_user,
         nom_cabinet: req.body.nom_cabinet,
         description: req.body.description,
-        horraire_cabinet: req.body.horraire_cabinet,
+        horaire_cabinet: req.body.horaire_cabinet,
         pdp: req.body.pdp 
 
     }
