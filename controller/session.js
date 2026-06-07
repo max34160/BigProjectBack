@@ -17,5 +17,5 @@ export async function login(req, res) {
 
 export async function get (req, res) {
     delete req.user.password;
-    res.json(req.user);
+    res.json({user : req.user});
 }
