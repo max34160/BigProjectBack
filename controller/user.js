@@ -31,7 +31,9 @@ export async function create(req, res) {
         password: await bcrypt.hash(req.body.password, 12)  
 
     }
+    console.log(user);
     const users = await model.create(user);
+      console.log(users);
     if(users){
         const token = jwt.sign({ id: users.id_user }, process.env.JWT_SECRET, { expiresIn: 365 * 24 * 60 * 60 * 1000 });            res.cookie('token', token, { maxAge: 365 * 24 * 60 * 60 * 1000 });
         res.json({ token: token ,user: users}); 
