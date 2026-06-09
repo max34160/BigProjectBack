@@ -39,7 +39,6 @@ describe('pro controller', () => {
       mockProInst.get.mockResolvedValue(mockPro);
 
       await getOne({ params: { id: '1' } }, mockRes());
-      // On vérifie l'appel
       expect(mockProInst.get).toHaveBeenCalledWith('1');
     });
 

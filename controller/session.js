@@ -4,8 +4,8 @@ import jwt from 'jsonwebtoken';
 
 const model = new User();
 
-const COOKIE_TTL_MS  = 7 * 24 * 60 * 60 * 1000; // 7 jours en ms
-const JWT_TTL_SEC    = 7 * 24 * 60 * 60;          // 7 jours en secondes
+const COOKIE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const JWT_TTL_SEC   = 7 * 24 * 60 * 60;
 
 export async function login(req, res) {
     const user = await model.getBy({ email: req.body.email });
