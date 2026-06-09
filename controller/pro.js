@@ -13,6 +13,12 @@ export async function getOne(req, res) {
     }
 }
 
+export async function update(req, res) {
+    req.body.id = req.params.id;
+    const pro = await model.update(req.body,req.params.id);
+    res.json({pro : pro});
+}
+
 export async function create(req, res) {
     const pro = {
         id_user: req.body.id_user,
@@ -52,7 +58,7 @@ export async function verify(req, res) {
     const medecinData = await findMedecinByIdentification(identificationNationale);
     if (!medecinData)
         return res.status(404).json({ error: "Numéro d'identification non reconnu" });
-
+    
     res.json({
         identificationNationale: medecinData["Identification nationale PP"],
         nom: medecinData["Nom d'exercice"],

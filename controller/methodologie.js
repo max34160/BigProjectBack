@@ -6,7 +6,7 @@ const model = new Methodologie();
 export async function getOne(req, res) {
     const methodologies = await model.get(req.params.id);
     if (methodologies) {
-        res.json(methodologies);
+        res.json({methodo : methodologies});
     } else {
         res.status(404).json({ error: "Methodologie not founnd"});
     }

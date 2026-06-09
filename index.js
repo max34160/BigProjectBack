@@ -18,3 +18,4 @@ app.use(cookieParser());
 
 app.use('/api', apiRouter);
 app.use('/', express.static('public'));
+
