@@ -19,3 +19,8 @@ export async function get(req, res) {
     delete req.user.password;
     res.json({user : req.user});
 }
+
+export async function logout(req, res) {
+    res.clearCookie('token');
+    res.json({ success: true });
+}
