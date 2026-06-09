@@ -5,9 +5,9 @@ const model = new Exercer();
 
 export async function getOneByProAndMethodo(req, res) {
     const data = {
-        id_user = req.params.id_pro,
-        id_methodo = req.params.id_methodo
-    }
+        id_pro: req.params.id_pro,
+        id_methodo: req.params.id_methodo
+    };
     const exercer = await model.getBy(data);
     if (exercer) {
         res.json({exercer : exercer});
@@ -17,7 +17,7 @@ export async function getOneByProAndMethodo(req, res) {
 }
 
 export async function getOneByPro(req, res) {
-    const exercer = await model.get(req.params.id_pro);
+    const exercer = await model.getAllBy({ id_pro: req.params.id_pro });
     if (exercer) {
         res.json({exercer : exercer});
     } else {
@@ -26,17 +26,15 @@ export async function getOneByPro(req, res) {
 }
 
 export async function update(req, res) {
-    req.body.id = req.params.id;
-    const newExercer = await model.update(req.body,req.params.id);
+    const newExercer = await model.update(req.body, req.params.id_pro);
     res.json({exercer : newExercer});
 }
 
 export async function create(req, res) {
     const exercer = {
-        id_user : req.body.id_user,
-        id_methodo : req.body.id_methodo
-
-    }
+        id_pro: req.body.id_pro,
+        id_methodo: req.body.id_methodo
+    };
     const newExercer = await model.create(exercer);
     res.json(({exercer : newExercer}));
 }

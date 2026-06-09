@@ -88,7 +88,7 @@ export async function register(req, res) {
     if (!medecinData)
         return res.status(403).json({ error: "Numéro d'identification non reconnu" });
 
-    const existing = await model.get(id_user);
+    const existing = await model.getBy({ id_user });
     if (existing)
         return res.status(409).json({ error: "Ce professionnel a déjà un profil" });
 
