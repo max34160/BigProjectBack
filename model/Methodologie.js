@@ -1,13 +1,12 @@
 import { AbstractModel } from "./AbstractModel.js";
-
+import db from "../database.js";
 
 export class Methodologie extends AbstractModel {
-
     table = "Methodologie";
-    colones =  ["titre","descriptif","img_presentation"];
+    primaryKey = "id_methodo";
+    colones = ["titre", "descriptif", "img_presentation"];
 
     async getAllMethodoByPro(id_user) {
-        const row = await db.getall('SELECT * FROM exercer WHERE id_pro =?', [id_user]);
-        return row;
+        return await db.getall('SELECT * FROM Exercer WHERE id_pro = ?', [id_user]);
     }
 }

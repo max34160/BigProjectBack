@@ -3,16 +3,25 @@ const OPENDATA_URL = "https://tabular-api.data.gouv.fr/api/resources/fffda7e9-0e
 export async function findMedecinByIdentification(identificationNationale) {
     const url = new URL(OPENDATA_URL);
     url.searchParams.set("Identification nationale PP__exact", identificationNationale);
-    const response = await fetch(url.toString());
-    const data = await response.json();
-    return data.data?.[0] || null;
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 10000);
+
+    try {
+        const response = await fetch(url.toString(), { signal: controller.signal });
+        clearTimeout(timeout);
+        const data = await response.json();
+        return data.data?.[0] || null;
+    } catch (err) {
+        clearTimeout(timeout);
+        throw new Error("API externe inaccessible : " + err.message);
+    }
 }
 
 export async function getMedecins(req, res) {
     const { identificationNationale, nom, prenom, exercice, profession, specialite } = req.query;
 
     const url = new URL(OPENDATA_URL);
-
     if (identificationNationale) url.searchParams.set("Identification nationale PP__exact", identificationNationale);
     if (nom) url.searchParams.set("Nom d'exercice__contains", nom);
     if (prenom) url.searchParams.set("Prénom d'exercice__contains", prenom);
@@ -23,18 +32,17 @@ export async function getMedecins(req, res) {
     try {
         const response = await fetch(url.toString());
         const data = await response.json();
-
-        const medecins = data.data .filter((row) => row["Identification nationale PP"])
-            .map((row) => ({
-            identificationNationale: row["Identification nationale PP"],
-            nom: row["Nom d'exercice"],
-            prenom: row["Prénom d'exercice"],
-            profession: row["Libellé profession"],
-            specialite: row["Libellé spécialité"],
-        }));
+        const medecins = data.data
+            .filter(row => row["Identification nationale PP"])
+            .map(row => ({
+                identificationNationale: row["Identification nationale PP"],
+                nom: row["Nom d'exercice"],
+                prenom: row["Prénom d'exercice"],
+                profession: row["Libellé profession"],
+                specialite: row["Libellé spécialité"],
+            }));
         res.json(medecins);
-
-    } catch (err) {
+    } catch {
         res.status(500).json({ error: "Erreur serveur" });
     }
 }

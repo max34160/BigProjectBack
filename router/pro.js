@@ -4,12 +4,12 @@ import * as proCtrl from '../controller/pro.js';
 
 const router = Router();
 
-
-router.get('/:id', proCtrl.getOne);
-router.post('/', proCtrl.create);
 router.get("/opendata", getMedecins);
+router.get("/search", proCtrl.searchByVille);
 router.post("/verify", proCtrl.verify);
 router.post("/register", proCtrl.register);
+router.get('/:id', proCtrl.getOne);
+router.post('/', proCtrl.create);
 
 
 export default router;

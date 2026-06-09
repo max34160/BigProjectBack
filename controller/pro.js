@@ -1,15 +1,14 @@
 import { Pro } from "../model/Pro.js";
 import { findMedecinByIdentification } from "./apiController.js";
 
-
 const model = new Pro();
 
 export async function getOne(req, res) {
-    const pros = await model.get(req.params.id);
-    if (pros) {
-        res.json({pro : pros});
+    const pro = await model.get(req.params.id);
+    if (pro) {
+        res.json({ pro });
     } else {
-        res.status(404).json({ error: "Pro not founnd"});
+        res.status(404).json({ error: "Professionnel introuvable" });
     }
 }
 
@@ -19,27 +18,38 @@ export async function create(req, res) {
         nom_cabinet: req.body.nom_cabinet,
         description: req.body.description,
         horaire_cabinet: req.body.horaire_cabinet,
-
-    }
-    const pros = await model.create(pro);
-    res.json(pros);
+    };
+    const created = await model.create(pro);
+    res.json({ pro: created });
 }
 
 export async function addMethodologie(req, res) {
-    const exercers = await model.addMethodo(req.params.id_user, req.params.id_methodo);
-    if (exercers) {
-        res.json(exercers);
+    const result = await model.addMethodo(req.params.id_user, req.params.id_methodo);
+    if (result) {
+        res.json(result);
     } else {
-        res.status(404).json({ error: "Pro not founnd"});
+        res.status(404).json({ error: "Professionnel introuvable" });
+    }
+}
+
+export async function searchByVille(req, res) {
+    const { ville, id_methodo } = req.query;
+    if (!id_methodo)
+        return res.status(400).json({ error: "id_methodo requis" });
+    try {
+        const pros = await model.searchByMethodo(id_methodo, ville || '');
+        res.json(pros);
+    } catch {
+        res.status(500).json({ error: "Erreur serveur" });
     }
 }
 
 export async function getAllProByMethodologie(req, res) {
-    const exercers = await model.getAllProByMethodo(req.params.id_methodo);
-    if (exercers) {
-        res.json(exercers);
+    const pros = await model.getAllProByMethodo(req.params.id_methodo);
+    if (pros) {
+        res.json(pros);
     } else {
-        res.status(404).json({ error: "Pro not founnd"});
+        res.status(404).json({ error: "Aucun professionnel trouvé" });
     }
 }
 
@@ -47,18 +57,20 @@ export async function verify(req, res) {
     const { identificationNationale } = req.body;
     if (!identificationNationale)
         return res.status(400).json({ error: "identificationNationale requis" });
-
-    const medecinData = await findMedecinByIdentification(identificationNationale);
-    if (!medecinData)
-        return res.status(404).json({ error: "Numéro d'identification non reconnu" });
-
-    res.json({
-        identificationNationale: medecinData["Identification nationale PP"],
-        nom: medecinData["Nom d'exercice"],
-        prenom: medecinData["Prénom d'exercice"],
-        profession: medecinData["Libellé profession"],
-        specialite: medecinData["Libellé spécialité"],
-    });
+    try {
+        const medecinData = await findMedecinByIdentification(identificationNationale);
+        if (!medecinData)
+            return res.status(404).json({ error: "Numéro d'identification non reconnu" });
+        res.json({
+            identificationNationale: medecinData["Identification nationale PP"],
+            nom: medecinData["Nom d'exercice"],
+            prenom: medecinData["Prénom d'exercice"],
+            profession: medecinData["Libellé profession"],
+            specialite: medecinData["Libellé spécialité"],
+        });
+    } catch {
+        res.status(503).json({ error: "Service indisponible, réessayez dans quelques instants." });
+    }
 }
 
 export async function register(req, res) {

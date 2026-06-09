@@ -5,17 +5,17 @@ import jwt from 'jsonwebtoken';
 const model = new User();
 
 export async function login(req, res) {
-    const user = await model.getBy({email : req.body.email});
-    if (user && bcrypt.compare(req.body.password, user.password)) {
+    const user = await model.getBy({ email: req.body.email });
+    if (user && await bcrypt.compare(req.body.password, user.password)) {
         const token = jwt.sign({ id: user.id_user }, process.env.JWT_SECRET, { expiresIn: 365 * 24 * 60 * 60 * 1000 });
         res.cookie('token', token, { maxAge: 365 * 24 * 60 * 60 * 1000 });
-        res.json({ token: token ,user: user});
+        res.json({ token, user });
     } else {
-        res.status(404).json({ error: "Wrong credentials"});
+        res.status(401).json({ error: "Identifiants incorrects" });
     }
 }
 
-export async function get (req, res) {
+export async function get(req, res) {
     delete req.user.password;
     res.json(req.user);
 }

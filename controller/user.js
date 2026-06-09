@@ -6,19 +6,17 @@ const model = new User();
 
 export async function getAll(req, res) {
     const users = await model.getAll();
-    for (let i = 0; i < users.length; i++) {
-        delete users[i].password;
-    }
+    for (const user of users) delete user.password;
     res.json(users);
 }
 
 export async function getOne(req, res) {
-    const users = await model.get(req.params.id);
-    if (users) {
-        delete users.password;
-        res.json(users);
+    const user = await model.get(req.params.id);
+    if (user) {
+        delete user.password;
+        res.json(user);
     } else {
-        res.status(404).json({ error: "User not founnd"});
+        res.status(404).json({ error: "Utilisateur introuvable" });
     }
 }
 
@@ -28,28 +26,25 @@ export async function create(req, res) {
         prenom: req.body.prenom,
         age: req.body.age,
         email: req.body.email,
-        password: await bcrypt.hash(req.body.password, 12)  
-
-    }
-    console.log(user);
-    const users = await model.create(user);
-      console.log(users);
-    if(users){
-        const token = jwt.sign({ id: users.id_user }, process.env.JWT_SECRET, { expiresIn: 365 * 24 * 60 * 60 * 1000 });            res.cookie('token', token, { maxAge: 365 * 24 * 60 * 60 * 1000 });
-        res.json({ token: token ,user: users}); 
-    }else {
-        res.status(404).json({ error: "User not founnd"});
+        password: await bcrypt.hash(req.body.password, 12),
+    };
+    const created = await model.create(user);
+    if (created) {
+        const token = jwt.sign({ id: created.id_user }, process.env.JWT_SECRET, { expiresIn: 365 * 24 * 60 * 60 * 1000 });
+        res.cookie('token', token, { maxAge: 365 * 24 * 60 * 60 * 1000 });
+        res.json({ token, user: created });
+    } else {
+        res.status(500).json({ error: "Erreur lors de la création du compte" });
     }
 }
 
 export async function update(req, res) {
-    req.body.id = req.params.id;
-    const users = await model.update(req.body,req.params.id);
-    delete users.password;
-    res.json(users);
+    const user = await model.update(req.body, req.params.id);
+    delete user.password;
+    res.json(user);
 }
 
 export async function remove(req, res) {
-    const users = await model.remove(req.params.id);
-    res.json(users);
+    const result = await model.remove(req.params.id);
+    res.json(result);
 }
