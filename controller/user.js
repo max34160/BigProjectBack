@@ -20,6 +20,9 @@ export async function getOne(req, res) {
     }
 }
 
+const COOKIE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const JWT_TTL_SEC   = 7 * 24 * 60 * 60;
+
 export async function create(req, res) {
     const user = {
         nom: req.body.nom,
@@ -30,30 +33,33 @@ export async function create(req, res) {
     };
     const created = await model.create(user);
     if (created) {
-        const token = jwt.sign({ id: created.id_user }, process.env.JWT_SECRET, { expiresIn: 365 * 24 * 60 * 60 * 1000 });
-        res.cookie('token', token, { maxAge: 365 * 24 * 60 * 60 * 1000 });
-        res.json({ token, user: created });
+        const token = jwt.sign({ id: created.id_user }, process.env.JWT_SECRET, { expiresIn: JWT_TTL_SEC });
+        res.cookie('token', token, {
+            maxAge: COOKIE_TTL_MS,
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+        });
+        const { password: _pw, ...safeUser } = created;
+        res.json({ token, user: safeUser });
     } else {
         res.status(500).json({ error: "Erreur lors de la création du compte" });
     }
 }
 
 export async function update(req, res) {
-    req.body.id = req.params.id;
-    let users = {};
-    if(req.body.password){
-        const update = {
-            password : await bcrypt.hash(req.body.password, 12)  
-        }
-        const newUser = await model.update(update,req.params.id);
-        users = newUser;
-    }else{
-        const newUser = await model.update(req.body,req.params.id);
-        users = newUser;
+    if (String(req.user.id_user) !== String(req.params.id)) {
+        return res.status(403).json({ error: "Action non autorisée" });
     }
-    
-    delete users.password;
-    res.json({user : users});
+    let updated;
+    if (req.body.password) {
+        updated = await model.update({ password: await bcrypt.hash(req.body.password, 12) }, req.params.id);
+    } else {
+        const { password: _pw, ...safe } = req.body;
+        updated = await model.update(safe, req.params.id);
+    }
+    const { password: _pw, ...safeUser } = updated;
+    res.json({ user: safeUser });
 }
 
 export async function remove(req, res) {

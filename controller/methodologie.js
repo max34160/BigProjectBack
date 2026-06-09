@@ -13,6 +13,7 @@ export async function getOne(req, res) {
 
 export async function getAll(req, res) {
     const methodologies = await model.getAll();
+    res.set('Cache-Control', 'public, max-age=3600');
     res.json(methodologies);
 }
 
