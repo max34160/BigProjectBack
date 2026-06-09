@@ -7,6 +7,7 @@ const router = Router();
 
 router.get("/opendata", getMedecins);
 router.get("/search", proCtrl.searchByVille);
+router.get("/user/:id_user", proCtrl.getByUser);
 router.post("/verify", proCtrl.verify);
 router.post("/register", proCtrl.register);
 router.get('/:id', proCtrl.getOne);

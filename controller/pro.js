@@ -12,6 +12,15 @@ export async function getOne(req, res) {
     }
 }
 
+export async function getByUser(req, res) {
+    const pro = await model.getBy({ id_user: req.params.id_user });
+    if (pro) {
+        res.json({ pro });
+    } else {
+        res.status(404).json({ error: "Professionnel introuvable" });
+    }
+}
+
 export async function update(req, res) {
     req.body.id = req.params.id;
     const pro = await model.update(req.body,req.params.id);
@@ -92,7 +101,8 @@ export async function register(req, res) {
     if (existing)
         return res.status(409).json({ error: "Ce professionnel a déjà un profil" });
 
-    const profil = { id_user, nom_cabinet, description, horaire_cabinet };
+    const { adresse, ville } = req.body;
+    const profil = { id_user, nom_cabinet, adresse: adresse || '', ville: ville || '', description, horaire_cabinet };
     const created = await model.create(profil);
     res.status(201).json(created);
 }
