@@ -24,8 +24,7 @@ export async function create(req, res) {
         id_user: req.body.id_user,
         nom_cabinet: req.body.nom_cabinet,
         description: req.body.description,
-        horraire_cabinet: req.body.horraire_cabinet,
-        pdp: req.body.pdp 
+        horaire_cabinet: req.body.horaire_cabinet,
 
     }
     const pros = await model.create(pro);
@@ -69,7 +68,7 @@ export async function verify(req, res) {
 }
 
 export async function register(req, res) {
-    const { identificationNationale, id_user, nom_cabinet, description, horaire_cabinet, pdp } = req.body;
+    const { identificationNationale, id_user, nom_cabinet, description, horaire_cabinet } = req.body;
     if (!identificationNationale || !id_user)
         return res.status(400).json({ error: "identificationNationale et id_user requis" });
 
@@ -81,7 +80,7 @@ export async function register(req, res) {
     if (existing)
         return res.status(409).json({ error: "Ce professionnel a déjà un profil" });
 
-    const profil = { id_user, nom_cabinet, description, horaire_cabinet, pdp };
+    const profil = { id_user, nom_cabinet, description, horaire_cabinet };
     const created = await model.create(profil);
     res.status(201).json(created);
 }
