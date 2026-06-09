@@ -3,9 +3,9 @@ import { Methodologie } from "../model/Methodologie.js";
 const model = new Methodologie();
 
 export async function getOne(req, res) {
-    const methodologie = await model.get(req.params.id);
-    if (methodologie) {
-        res.json(methodologie);
+    const methodologies = await model.get(req.params.id);
+    if (methodologies) {
+        res.json({methodo : methodologies});
     } else {
         res.status(404).json({ error: "Méthodologie introuvable" });
     }

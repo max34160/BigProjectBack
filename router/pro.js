@@ -4,6 +4,10 @@ import * as proCtrl from '../controller/pro.js';
 
 const router = Router();
 
+
+router.get('/:id', proCtrl.getOne);
+router.post('/', proCtrl.create);
+router.put('/:id', proCtrl.update);
 router.get("/opendata", getMedecins);
 router.get("/search", proCtrl.searchByVille);
 router.post("/verify", proCtrl.verify);

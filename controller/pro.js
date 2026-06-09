@@ -12,6 +12,12 @@ export async function getOne(req, res) {
     }
 }
 
+export async function update(req, res) {
+    req.body.id = req.params.id;
+    const pro = await model.update(req.body,req.params.id);
+    res.json({pro : pro});
+}
+
 export async function create(req, res) {
     const pro = {
         id_user: req.body.id_user,
