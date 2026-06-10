@@ -9,6 +9,7 @@ const JWT_TTL_SEC   = 7 * 24 * 60 * 60;
 
 export async function login(req, res) {
     const user = await model.getBy({ email: req.body.email });
+    
     if (user && await bcrypt.compare(req.body.password, user.password)) {
         const token = jwt.sign({ id: user.id_user }, process.env.JWT_SECRET, { expiresIn: JWT_TTL_SEC });
         res.cookie('token', token, {

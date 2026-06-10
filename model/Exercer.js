@@ -42,13 +42,13 @@ export class Exercer extends AbstractModel {
 
     async create(data) {
         await db.insert(
-            'INSERT INTO Exercer(id_pro, id_methodo) VALUES (:id_pro, :id_methodo)',
+            'INSERT INTO Exercer(id_pro, id_methodologie) VALUES (:id_pro, :id_methodologie)',
             data
         );
         return data;
     }
 
-    async removeEntry(id_pro, id_methodo) {
-        return await db.delete('DELETE FROM Exercer WHERE id_pro = ? AND id_methodo = ?', [id_pro, id_methodo]);
+    async removeEntry(id_pro, id_methodologie) {
+        return await db.delete('DELETE FROM Exercer WHERE id_pro = ? AND id_methodologie = ?', [id_pro, id_methodologie]);
     }
 }

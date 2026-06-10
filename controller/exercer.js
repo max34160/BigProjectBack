@@ -3,7 +3,7 @@ import { Exercer } from "../model/Exercer.js";
 const model = new Exercer();
 
 export async function getOneByProAndMethodo(req, res) {
-    const exercer = await model.getBy({ id_pro: req.params.id_pro, id_methodo: req.params.id_methodo });
+    const exercer = await model.getBy({ id_pro: req.params.id_pro, id_methodologie: req.params.id_methodologie });
     if (exercer) {
         res.json({ exercer });
     } else {
@@ -23,15 +23,15 @@ export async function getOneByPro(req, res) {
 export async function create(req, res) {
     const exercer = {
         id_pro: req.body.id_pro,
-        id_methodo: req.body.id_methodo,
+        id_methodologie: req.body.id_methodologie,
     };
     const newExercer = await model.create(exercer);
     res.json({ exercer: newExercer });
 }
 
 export async function remove(req, res) {
-    const { id_pro, id_methodo } = req.params;
-    await model.removeEntry(id_pro, id_methodo);
+    const { id_pro, id_methodologie } = req.params;
+    await model.removeEntry(id_pro, id_methodologie);
     res.json({ success: true });
 }
 

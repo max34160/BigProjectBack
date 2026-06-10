@@ -1,4 +1,4 @@
-import { Pro } from "../model/Pro.js";
+import { Pro } from "../model/pro.js";
 import { findMedecinByIdentification } from "./apiController.js";
 
 const model = new Pro();

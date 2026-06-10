@@ -1,4 +1,4 @@
-import { Methodologie } from "../model/Methodologie.js";
+import { Methodologie } from "../model/methodologie.js";
 
 const model = new Methodologie();
 
