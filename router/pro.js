@@ -1,16 +1,17 @@
 import { Router } from "express";
 import { getMedecins } from "../controller/apiController.js";
 import * as proCtrl from '../controller/pro.js';
+import { authByToken } from '../midelware/auth.js';
 
 const router = Router();
 
-
-router.get('/:id', proCtrl.getOne);
-router.post('/', proCtrl.create);
-router.put('/:id', proCtrl.update);
 router.get("/opendata", getMedecins);
-router.post("/verify", proCtrl.verify);
-router.post("/register", proCtrl.register);
-
+router.get("/search", proCtrl.searchByVille);
+router.get("/user/:id_user", proCtrl.getByUser);
+router.post("/verify", authByToken, proCtrl.verify);
+router.post("/register", authByToken, proCtrl.register);
+router.get('/:id', proCtrl.getOne);
+router.post('/', authByToken, proCtrl.create);
+router.put('/:id', authByToken, proCtrl.update);
 
 export default router;

@@ -1,6 +1,5 @@
 import { Methodologie } from "../model/Methodologie.js";
 
-
 const model = new Methodologie();
 
 export async function getOne(req, res) {
@@ -8,31 +7,31 @@ export async function getOne(req, res) {
     if (methodologies) {
         res.json({methodo : methodologies});
     } else {
-        res.status(404).json({ error: "Methodologie not founnd"});
+        res.status(404).json({ error: "Méthodologie introuvable" });
     }
 }
 
 export async function getAll(req, res) {
     const methodologies = await model.getAll();
+    res.set('Cache-Control', 'public, max-age=3600');
     res.json(methodologies);
 }
-
 
 export async function create(req, res) {
     const methodologie = {
         titre: req.body.titre,
         descriptif: req.body.descriptif,
-        img_presentation: req.body.img_presentation
+        img_presentation: req.body.img_presentation,
     };
-    const methodologies = await model.create(methodologie);
-    res.json(methodologies);
+    const created = await model.create(methodologie);
+    res.json(created);
 }
 
 export async function getAllMethodologieByPro(req, res) {
-    const exercers = await model.getAllMethodoByPro(req.params.id_user);
-    if (exercers) {
-        res.json(exercers);
+    const methodologies = await model.getAllMethodoByPro(req.params.id_user);
+    if (methodologies) {
+        res.json(methodologies);
     } else {
-        res.status(404).json({ error: "Pro not founnd"});
+        res.status(404).json({ error: "Professionnel introuvable" });
     }
 }

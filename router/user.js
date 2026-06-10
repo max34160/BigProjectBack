@@ -1,12 +1,13 @@
 import { Router } from "express";
 import * as userCtrl from '../controller/user.js';
+import { authByToken } from '../midelware/auth.js';
 
 const router = Router();
 
-router.get('/', userCtrl.getAll);
-router.get('/:id', userCtrl.getOne);
 router.post('/', userCtrl.create);
-router.put('/:id', userCtrl.update);
-router.delete('/:id', userCtrl.remove);
+router.get('/', authByToken, userCtrl.getAll);
+router.get('/:id', authByToken, userCtrl.getOne);
+router.put('/:id', authByToken, userCtrl.update);
+router.delete('/:id', authByToken, userCtrl.remove);
 
 export default router;

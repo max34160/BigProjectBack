@@ -1,25 +1,16 @@
 import db from "../database.js";
 
 export class AbstractModel {
-
-    table; // required in children
-    colones; // required in children
+    table;
+    colones;
 
     async get(id) {
-        const idCol = 'id_' + this.table.toLowerCase();
-        const row = await db.getrow('SELECT * FROM ' + this.table + ' WHERE ' + idCol + '=?', [id]);
-        return row;
-    }
-
-    async getOneExercer(id) {
-        const idCol = 'id_' + this.table.toLowerCase();
-        const row = await db.getrow('SELECT * FROM ' + this.table + ' WHERE ' + idCol + '=?', [id]);
-        return row;
+        const idCol = this.primaryKey || ('id_' + this.table);
+        return await db.getrow('SELECT * FROM ' + this.table + ' WHERE ' + idCol + ' = ?', [id]);
     }
 
     async getAll() {
-        const rows = await db.getall('SELECT * FROM ' + this.table);
-        return rows;
+        return await db.getall('SELECT * FROM ' + this.table);
     }
 
     async getBy(data) {
@@ -27,54 +18,37 @@ export class AbstractModel {
     }
 
     async getAllBy(data) {
-        let colone = [];
-
+        const cols = [];
         for (const key in data) {
             if (this.colones.includes(key))
-                colone.push(key + ' = :' + key);
+                cols.push(key + ' = :' + key);
         }
-        const rows = await db.getall('SELECT * FROM ' + this.table + ' WHERE ' + colone.join(' AND '), data);
-        return rows;
+        return await db.getall('SELECT * FROM ' + this.table + ' WHERE ' + cols.join(' AND '), data);
     }
 
     async create(data) {
-        let colone = [];
-        let value = [];
-
-        for (let i = 0; i < this.colones.length; i++) {
-            colone.push(this.colones[i])
-            value.push(":" + this.colones[i])
-        }
-
-        const sql = `INSERT INTO ${this.table}(${colone.join(',')}) VALUES (${value.join(',')})`;
+        const cols = this.colones.map(c => c);
+        const vals = this.colones.map(c => ':' + c);
+        const sql = `INSERT INTO ${this.table}(${cols.join(', ')}) VALUES (${vals.join(', ')})`;
         const insertId = await db.insert(sql, data);
-        const newdata = this.get(insertId);
-        
-        return newdata;
+        return await this.get(insertId);
     }
 
-    async update(data,id) {
-        let colone = [];
-        const idCol = 'id_' + this.table.toLowerCase();
+    async update(data, id) {
+        const idCol = this.primaryKey || ('id_' + this.table);
+        const cols = [];
         for (const key in data) {
             if (this.colones.includes(key))
-                colone.push(key + ' = :' + key);
+                cols.push(key + ' = :' + key);
         }
-        await db.update('UPDATE '+this.table+' SET '+colone.join(',')+' WHERE '+idCol+'='+String(id), data);
-        console.log(data.id)
-        const newdata = this.get(data.id);
-        console.log(newdata)
-        return newdata;
+        await db.update('UPDATE ' + this.table + ' SET ' + cols.join(', ') + ' WHERE ' + idCol + ' = ' + String(id), data);
+        return await this.get(id);
     }
 
     async remove(objOrId) {
-        let id = objOrId
-        if (objOrId.id)
-            id = objOrId.id
-        const sql = `DELETE FROM ${this.table} WHERE id=?`;
-        const rowsAffected = await db.delete(sql, [id]);
-        if (rowsAffected) return true;
-        return false;
+        const id = objOrId?.id ?? objOrId;
+        const idCol = this.primaryKey || ('id_' + this.table);
+        const rowsAffected = await db.delete('DELETE FROM ' + this.table + ' WHERE ' + idCol + ' = ?', [id]);
+        return !!rowsAffected;
     }
-
 }

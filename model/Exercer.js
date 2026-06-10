@@ -4,7 +4,7 @@ import db from "../database.js";
 export class Exercer extends AbstractModel {
 
     table = "Exercer";
-    colones =  ["id_pro","id_methodologie"];
+    colones = ["id_pro", "id_methodologie"];
 
     async createNewExercer(data) {
         let colone = [];
@@ -40,4 +40,15 @@ export class Exercer extends AbstractModel {
         return newdata;
     }
 
+    async create(data) {
+        await db.insert(
+            'INSERT INTO Exercer(id_pro, id_methodo) VALUES (:id_pro, :id_methodo)',
+            data
+        );
+        return data;
+    }
+
+    async removeEntry(id_pro, id_methodo) {
+        return await db.delete('DELETE FROM Exercer WHERE id_pro = ? AND id_methodo = ?', [id_pro, id_methodo]);
+    }
 }
