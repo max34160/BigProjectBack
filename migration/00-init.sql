@@ -27,7 +27,7 @@ CREATE TABLE Pro (
 
 -- Table Methodologie
 CREATE TABLE Methodologie (
-    id_methodo INT PRIMARY KEY AUTO_INCREMENT,
+    id_methodologie INT PRIMARY KEY AUTO_INCREMENT,
     titre VARCHAR(150),
     descriptif TEXT,
     img_presentation VARCHAR(255)
@@ -37,8 +37,8 @@ CREATE TABLE Methodologie (
 -- Relation Exercer (Pro - Methodologie)
 CREATE TABLE Exercer (
     id_pro INT,
-    id_methodo INT,
+    id_methodologie INT,
     PRIMARY KEY (id_pro, id_methodo),
     FOREIGN KEY (id_pro) REFERENCES Pro(id_pro),
-    FOREIGN KEY (id_methodo) REFERENCES Methodologie(id_methodo)
+    FOREIGN KEY (id_methodologie) REFERENCES Methodologie(id_methodologie)
 );

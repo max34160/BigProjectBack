@@ -6,7 +6,13 @@ export class AbstractModel {
     colones; // required in children
 
     async get(id) {
-        const idCol = 'id_' + this.table;
+        const idCol = 'id_' + this.table.toLowerCase();
+        const row = await db.getrow('SELECT * FROM ' + this.table + ' WHERE ' + idCol + '=?', [id]);
+        return row;
+    }
+
+    async getOneExercer(id) {
+        const idCol = 'id_' + this.table.toLowerCase();
         const row = await db.getrow('SELECT * FROM ' + this.table + ' WHERE ' + idCol + '=?', [id]);
         return row;
     }
@@ -43,19 +49,21 @@ export class AbstractModel {
         const sql = `INSERT INTO ${this.table}(${colone.join(',')}) VALUES (${value.join(',')})`;
         const insertId = await db.insert(sql, data);
         const newdata = this.get(insertId);
-
+        
         return newdata;
     }
 
     async update(data,id) {
         let colone = [];
-        const idCol = 'id_' + this.table;
+        const idCol = 'id_' + this.table.toLowerCase();
         for (const key in data) {
             if (this.colones.includes(key))
                 colone.push(key + ' = :' + key);
         }
         await db.update('UPDATE '+this.table+' SET '+colone.join(',')+' WHERE '+idCol+'='+String(id), data);
+        console.log(data.id)
         const newdata = this.get(data.id);
+        console.log(newdata)
         return newdata;
     }
 

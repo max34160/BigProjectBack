@@ -5,6 +5,7 @@ import jwt from 'jsonwebtoken';
 const model = new User();
 
 export async function login(req, res) {
+    console.log(req.body)
     const user = await model.getBy({email : req.body.email});
     if (user && bcrypt.compare(req.body.password, user.password)) {
         const token = jwt.sign({ id: user.id_user }, process.env.JWT_SECRET, { expiresIn: 365 * 24 * 60 * 60 * 1000 });

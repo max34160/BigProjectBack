@@ -7,7 +7,7 @@ export class Methodologie extends AbstractModel {
     colones =  ["titre","descriptif","img_presentation"];
 
     async getAllMethodoByPro(id_user) {
-        const row = await db.getall('SELECT * FROM exercer WHERE id_pro =?', [id_user]);
+        const row = await db.getall('SELECT * FROM Exercer WHERE id_pro =?', [id_user]);
         return row;
     }
 }
