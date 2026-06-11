@@ -38,7 +38,7 @@ CREATE TABLE Methodologie (
 CREATE TABLE Exercer (
     id_pro INT,
     id_methodologie INT,
-    PRIMARY KEY (id_pro, id_methodo),
+    PRIMARY KEY (id_pro, id_methodologie),
     FOREIGN KEY (id_pro) REFERENCES Pro(id_pro),
     FOREIGN KEY (id_methodologie) REFERENCES Methodologie(id_methodologie)
 );
