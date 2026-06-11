@@ -1,4 +1,5 @@
-import { Exercer } from "../model/Exercer.js";
+import { Exercer } from "../model/exercer.js";
+
 
 const model = new Exercer();
 
@@ -26,6 +27,9 @@ export async function create(req, res) {
         id_methodologie: req.body.id_methodologie,
     };
     const newExercer = await model.create(exercer);
+    if(newExercer.error){
+        res.status(404).json({ error: "Utilisateur a déja une méthodologie exercer" })
+    }
     res.json({ exercer: newExercer });
 }
 

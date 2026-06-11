@@ -41,11 +41,18 @@ export class Exercer extends AbstractModel {
     }
 
     async create(data) {
-        await db.insert(
-            'INSERT INTO Exercer(id_pro, id_methodologie) VALUES (:id_pro, :id_methodologie)',
-            data
-        );
-        return data;
+        const verif = await this.getExercer(data.id_pro);
+        
+        if(!verif){
+            await db.insert(
+                'INSERT INTO Exercer(id_pro, id_methodologie) VALUES (:id_pro, :id_methodologie)',
+                data
+            );
+            return data;
+        }else{
+            return { error: "" };
+        }
+
     }
 
     async removeEntry(id_pro, id_methodologie) {

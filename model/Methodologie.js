@@ -3,7 +3,7 @@ import db from "../database.js";
 
 export class Methodologie extends AbstractModel {
     table = "Methodologie";
-    primaryKey = "id_methodo";
+    primaryKey = "id_methodologie";
     colones = ["titre", "descriptif", "img_presentation"];
 
     async getAllMethodoByPro(id_user) {

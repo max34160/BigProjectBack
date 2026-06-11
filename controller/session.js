@@ -16,7 +16,7 @@ export async function login(req, res) {
             maxAge: COOKIE_TTL_MS,
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
+            sameSite: 'strict'
         });
         const { password: _pw, ...safeUser } = user;
         res.json({ token, user: safeUser });
